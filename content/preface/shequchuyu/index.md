@@ -70,13 +70,9 @@ summary: 自“中国社区厨余堆肥试点”对外招募以来，我们已�
 
 具体试点招募信息和招募答疑请点击下方链接，报名表填写期间，如有其他疑问，可发送邮件到cccp2019@163.com或给LIEE公众号后台留言，项目组会定时回复。
 
-:point_right:社区堆肥试点招募 / 加入我们，共创资源化未来！
+→:[社区堆肥试点招募 / 加入我们，共创资源化未来！](https://mp.weixin.qq.com/s/IWIVvVOgmPU_awPQBjeSzQ)
 
-<https://mp.weixin.qq.com/s/IWIVvVOgmPU_awPQBjeSzQ>
-
-:point_right:社区厨余堆肥试点招募答疑/你关心的问题都在这里啦
-
-<https://mp.weixin.qq.com/s/Yv-NZp1O5CFofR9-UOsaAA>
+→:[社区厨余堆肥试点招募答疑/你关心的问题都在这里啦](https://mp.weixin.qq.com/s/Yv-NZp1O5CFofR9-UOsaAA)
 
 试点报名表提交截止至：2020年12月20日17:00
 
