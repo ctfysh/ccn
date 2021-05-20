@@ -1,0 +1,375 @@
+---
+title: "Home"
+---
+```{css, echo=FALSE}
+d-title {
+  text-align: center;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(readxl)
+library(leaflet)
+library(leafletCN)
+library(plotly)
+library(highcharter)
+library(echarts4r)
+library(lubridate)
+library(crosstalk)
+# library(bootstraplib)
+# bs_theme_new()
+# # Color palette derives from https://tombrow.com/dark-mode-website-css
+# bs_theme_base_colors(bg = "#444", fg = "#e4e4e4")
+# bs_theme_accent_colors(primary = "#e39777",
+#                        secondary = "#fdce93")
+# bs_theme_fonts(base = "Roboto Condensed",
+#                code = "Monaco")
+d <- read_excel("all3.xlsx")
+e <- read_excel("section2jwd.xlsx",1)  
+f <- read_excel("工作簿1.xlsx") %>% 
+  mutate(startTime=as.Date(startTime))
+pcols <-
+  c(
+    "red",
+    "darkred",
+    "lightred",
+    "orange",
+    "beige",
+    "green",
+    "darkgreen",
+    "lightgreen",
+    "blue",
+    "darkblue",
+    "lightblue",
+    "purple",
+    "darkpurple",
+    "pink",
+    "cadetblue",
+    "white",
+    "gray",
+    "lightgray",
+    "black"
+    
+  )
+ll <- d %>% distinct(across(c(2,31:32, 35:36))) 
+  
+d1 <- d %>% select(2,4,31,14:18) %>% 
+  gather("温度类型","数值",-c(1:3)) %>% 
+  rename(`时间`=`获取监测数据的时间`) %>% 
+  mutate(`时间`=ymd(`时间`)) %>% 
+  arrange(across(1:2)) %>% 
+  filter(!is.na(`数值`)) 
+d4 <- d1%>% 
+  group_by(`堆肥池`) %>%
+  summarise(openday=min(`时间`)) %>% ungroup() 
+
+d2 <- d %>% select(2,31:32,35:36,4,6) %>% 
+  rename(`时间`=`获取监测数据的时间`) %>% 
+  mutate(`时间`=ymd(`时间`)) %>% 
+  arrange(across(1:3)) %>% 
+  filter(!is.na(`添加厨余重量（kg)`))%>% 
+  group_by(`堆肥池`) %>%
+  summarise(`堆肥总重量`=sum(as.numeric(`添加厨余重量（kg)`))) %>% 
+  ungroup() %>% 
+  left_join(.,d4,by="堆肥池") 
+d3 <- d %>% select(2,31:32,35:36) %>% 
+  distinct(`堆肥池`,`伙伴名称`,.keep_all = TRUE) %>% 
+  left_join(.,d2,by="堆肥池") %>% 
+  left_join(.,f[c(2,4,7)],by=c(`伙伴名称`="name"
+)) %>% mutate(sto=if_else(伙伴名称 %in% c("万科公益基金会","乐活（广州）生态环境科技有限责任公司"),"停止","继续"))
+
+set.seed(12335)
+palbk <- tibble(
+  id = 1:10,
+  color = pcols[c(1, 4:6, 9:10, 12:15)] %>% sample(),
+  `伙伴名称` = d3 %>% distinct(`伙伴名称`) %>% pull()
+)
+icons <- awesomeIcons(
+  icon = 'trash',
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor ='red'
+    #d3 %>% left_join(palbk) %>% with(color)
+)
+iconsm <- awesomeIcons(
+  icon = 'trash',
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor ='green'
+    #d3 %>% left_join(palbk) %>% with(color)
+)
+icons1 <- awesomeIcons(
+  icon = 'trash',
+  iconColor = 'white',
+  library = 'glyphicon',
+  markerColor ='orange'
+    #d3 %>% left_join(palbk) %>% with(color)
+)
+
+
+
+lv <- unique(d1$"温度类型")[c(1, 4, 3, 2)]
+
+dd2 <- d2 %>% filter(str_detect("伙伴名称", "溧水"),
+                     "堆肥池" == "Ghana左")
+
+sm <- SharedData$new(ll[!(ll$伙伴名称 %in% c("万科公益基金会","乐活（广州）生态环境科技有限责任公司","郑州环境维护协会")),], ~ "堆肥池", group = "堆肥池")
+sm1 <- d3[!(d3$伙伴名称 %in% c("万科公益基金会","乐活（广州）生态环境科技有限责任公司","郑州环境维护协会")),]
+sl <- SharedData$new(ll[!(ll$伙伴名称 %in% c("郑州环境维护协会")),] %>% filter(伙伴名称 %in% c("万科公益基金会","乐活（广州）生态环境科技有限责任公司","郑州环境维护协会")), ~ "堆肥池", group = "堆肥池")
+sl1 <- d3[!(ll$伙伴名称 %in% c("郑州环境维护协会")),] %>% filter(伙伴名称 %in% c("万科公益基金会","乐活（广州）生态环境科技有限责任公司","郑州环境维护协会"))
+
+```
+
+
+```{r, layout="l-page", fig.height=6}
+pppsm1 <- paste0(
+  
+  "
+  <head>
+  <style>
+table, th,td {
+  border: 0px;
+  text-align:center;
+  font-text:center；
+  font-size:1px;
+  font-family: 'PingFang SC';
+
+}
+th{
+  word-break: keep-all;/*必须*/
+}
+
+td{
+  font-weight: normal; 
+  font-family: 'PingFang SC';
+}
+
+  </style>
+  </head>
+  
+  <table style='width:100%'>",
+# "<colgroup span='0' style='color:#0078A8'></colgroup>",
+#  "<colgroup bgcolor='#0078A8'></colgroup>",
+ 
+  "<tr>",
+  "<th>堆肥设施：</th>",
+  "<td>",
+  sm1$"堆肥池",
+  "</td>",
+  "</tr>",
+    
+
+  "<tr>",
+ # "<th><font color='#0078A8'>单位：</font></th>",
+  "<th>试点机构：</th>",
+  "<td><a href= 'd3$net'>",
+  sm1$"伙伴名称",
+  "</a>",
+  "</td>",
+  "</tr>",
+  
+  "<tr>",
+  "<th>试点社区：</th>",
+  "<td>",
+  sm1$"地址",
+  "</td>",
+  "</tr>",
+  
+  "<tr>",
+  "<th>启动时间:</th>",
+  "<td>",
+  sm1$"openday",
+  "</td>",
+  "</tr>",
+
+  "<tr>",
+  "<th>继续/停止:</th>",
+  "<th>",
+  sm1$sto,
+  "</th>",
+  "</tr>" ,
+
+  "<tr>",
+  "<th>",
+  sm1$"communityType",
+  ":</th>",
+  "<td>",
+  sm1$"堆肥总重量",
+  "kg</td>",
+  "</tr>"  
+  
+)
+
+pppsl1 <- paste0(
+  
+  "
+  <head>
+  <style>
+table, th,td {
+  border: 0px;
+  text-align:center;
+  font-text:center；
+  font-size:1px;
+  font-family: 'PingFang SC';
+  /*word-break: keep-all;必须*/
+}
+th{
+  word-break: keep-all;/*必须*/
+}
+
+td{
+  font-weight: normal; 
+  font-family: 'PingFang SC';
+}
+
+  </style>
+  </head>
+  
+  <table style='width:100%'>",
+# "<colgroup span='0' style='color:#0078A8'></colgroup>",
+#  "<colgroup bgcolor='#0078A8'></colgroup>",
+ 
+  "<tr>",
+  "<th>堆肥设施：</th>",
+  "<td>",
+  sl1$"堆肥池",
+  "</td>",
+  "</tr>",
+    
+
+  "<tr>",
+ # "<th><font color='#0078A8'>单位：</font></th>",
+  "<th>试点机构：</th>",
+  "<td><a href= 'd3$net'>",
+  sl1$"伙伴名称",
+  "</a>",
+  "</td>",
+  "</tr>",
+  
+  "<tr>",
+  "<th>试点社区：</th>",
+  "<td>",
+  sl1$"地址",
+  "</td>",
+  "</tr>",
+  
+  "<tr>",
+  "<th>启动时间:</th>",
+  "<td>",
+  sl1$"openday",
+  "</td>",
+  "</tr>",
+
+  "<tr>",
+  "<th>继续/停止:</th>",
+  "<th>",
+  sl1$sto,
+  "</th>",
+  "</tr>" ,
+
+  "<tr>",
+  "<th>",
+  sl1$"communityType",
+  ":</th>",
+  "<td>",
+  sl1$"堆肥总重量",
+  "kg</td>",
+  "</tr>"  
+  
+)
+
+ppp1 <- paste0(
+  
+  "<head>
+  <style>
+  table, th,td {
+  border: 0px;
+  text-align:center;
+  font-text:center；
+  font-size:1px;
+  font-family: 'PingFang SC';
+  /*word-break: keep-all;/*必须*/
+  }
+th{
+  word-break: keep-all;/*必须*/
+}
+td{
+  font-weight: normal; 
+  font-family: 'PingFang SC';
+}
+
+
+
+  </style>
+  </head>
+  
+  <table style='width:100%;'>",
+# "<colgroup span='0' style='color:#0078A8'></colgroup>",
+ # "<colgroup bgcolor='#0078A8'></colgroup>",
+ 
+  "<tr>",
+  "<th>申请机构：</th>",
+  "<td>",
+  e$"伙伴名称",
+  "</td>",
+  "</tr>",
+    
+
+
+  
+  "<tr>",
+  "<th>地址：</th>",
+  "<td>",
+  e$"地址",
+  "</td>",
+  "</tr>"
+  
+
+  
+)
+sl %>% leaflet() %>% 
+  addTiles()%>%addProviderTiles("NASAGIBS.ViirsEarthAtNight2012",group="NASA")%>%
+  amap(group="amap") %>%
+  setView(113, 31.5, zoom = 5) %>%
+  addAwesomeMarkers(
+    lng = ~ jitter(`经度GCJ`),
+    lat = ~ jitter(`纬度GCJ`),
+    popup = ~pppsl1 ,
+    popupOptions = (maxWidth = 400),
+    icon = icons,
+    group = "H"
+  )%>%
+  leafem::addHomeButton(group = "H") %>% 
+    # Layers control
+  addLayersControl(
+    baseGroups = c( "amap","NASA"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) %>% 
+  addAwesomeMarkers(
+    data = e,
+    lng = ~ jitter(`经度GCJ`),
+    lat = ~ jitter(`纬度GCJ`),
+    icon = icons1,
+    popup = ~ppp1 ,
+    popupOptions = (maxWidth = 400),
+    group = "H"
+  )%>% 
+  addAwesomeMarkers(
+    data = sm,
+    lng = ~ jitter(`经度GCJ`),
+    lat = ~ jitter(`纬度GCJ`),
+    icon = iconsm,
+    popup = ~pppsm1 ,
+    popupOptions = (maxWidth = 400),
+    group = "H"
+  )
+  
+
+
+```
+
+
+
+

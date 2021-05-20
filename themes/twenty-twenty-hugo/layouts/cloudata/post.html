@@ -1,0 +1,19 @@
+
+    <div class="dc-block">
+        <a ontouchstart="dcPressed.call(this)" ontouchend="dcReleased.call(this)" ontouchmove="dcreleased.call(this)"  href="{{ .Permalink }}" class="blog-dc">
+          <article class="dc-body">
+                <h5 class="dc-title">{{ .Title }}</h5>
+             </article>
+          {{ with .Resources.GetMatch "image.jpg"}}
+          <div class="dc-img-container">
+            <picture>
+              <source srcset="{{ .Permalink }}">
+              <img src="{{ .Permalink }}" class="dc-img" style="min-height: 80px"/>
+            </picture>
+            
+          </div>
+              {{- end }}
+              
+        </a>
+    </div>
+          

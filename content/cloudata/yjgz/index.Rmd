@@ -1,0 +1,162 @@
+---
+title: 宜居广州生态环境保护中心
+---
+
+
+```{css, echo=FALSE}
+d-title {
+  text-align: center;
+}
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(readxl)
+library(leaflet)
+library(sf)
+library(highcharter)
+library(echarts4r)
+library(lubridate)
+d <- read_excel("../../all3.xlsx")
+ll1 <- d %>% distinct(across(c(2, 31:32, 33:34)))
+
+d1 <- d %>% select(4, 2, 31, 14:17) %>%
+  gather(`温度类型`, `数值`, -c(1:3)) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+lv <- unique(d1$`温度类型`)[c(1, 4, 3, 2)]
+d2 <- d %>% select(4, 2, 31, 6, 9, 12) %>%
+  gather(`物质类型`, `数值`, -c(1:3)) %>%
+  mutate(`物质类型` = str_replace_all(`物质类型`,
+                                  "今日|添加|重量.*",
+                                  "")) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+d3 <- d %>% 
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  rename(`厨余`=`添加厨余重量（kg)`) %>% 
+  rename(`辅料`=`添加辅料重量（kg)`) %>% 
+  rename(`其他物质`=`今日添加其他物质重量（kg)`)
+  
+  
+```
+
+# 宜居广州生态环境保护中心
+
+## 关 于 机 构
+
+### 宜居广州生态环境保护中心，成立于2012年，是一家关注垃圾分类及废弃物管理的广州本土环保NGO，是中国“零废弃联盟”的创始机构之一。
+
+### 宜居广州致力于通过研究城市废弃物管理，积极与政府部门、企业和社会环保机构合作，推动源头减少废弃物和城市垃圾分类的理念落实，以政策倡导推动督促政府部门落实相关政策，以公众倡导活动引导社会各界关注并参与城市废弃物环保行动，助力完善城市固废处理和管理体系。
+
+### 此次宜居广州参与试点的是在佛山市合作新兴社区。该社区由宜居广州指导广州洁诚物业管理有限公司实施垃圾分类和堆肥工作。第二轮期间由于公司变更，更改为广东宝鸿环境工程有限公司。
+
+## 走 进 堆 肥 点
+
+**堆肥点名称**：佛山市里水镇新兴社区
+
+**堆肥类型**：开放式堆肥
+
+**基本情况**：2019年3月至9月共进行3轮堆肥，学校食堂部分厨余用于堆肥，由于缺少专人管理，并未实现全部厨余的堆肥，具有餐厨堆肥实验的性质。第一轮堆肥产品已全部用于校园生态菜园种植。
+
+**堆肥设施：**宜居广州指导在地保洁公司使用密封式保温堆肥箱开展社区厨余堆肥。主要以厨余堆肥宣教为目的，让居民了解厨余堆肥的方式，接受在社区开展厨余堆肥。每天从收集的厨余中拿出一小部分进行堆肥，堆肥干物质为锯末。未添加菌剂。
+
+采用3种堆肥设施，2种为密封式可转堆肥箱，1种为开放式立式堆肥箱。其中，白箱总容积0.8立方，堆肥转桶。侧壁有通气孔。下部有渗滤液流出口。金属外层内部有塑料泡沫保温层。绿箱总容积0.6立方，堆肥转桶。侧壁有通气孔。下部有渗滤液有收集接口，可接矿泉水瓶。金属外层内部有塑料泡沫保温层。实际操作中，基本上每轮62天左右即出仓。
+
+<img src="/images/image039.png" style="width: 80%; margin-left: 10%;"/>
+
+####  密封式堆肥箱-白箱
+
+<img src="/images/image041.png" style="width: 80%; margin-left: 10%;"/> 
+
+#### 密封式堆肥箱-绿箱
+
+## 堆 肥 操 作
+
+每天收集的厨余中随机选择一部分用于堆肥。厨余不粉碎。添加的干物质为很细的锯末。由于白箱和绿箱为转桶，厨余与锯末大致按照重量比2:1添加后，旋转桶身，即可实现堆肥物质的充分混合。堆肥周期为45天，温度下降到35°左右作为判断堆肥完成的标准。出肥赠送居民用于种花等。
+
+<img src="/images/image043.png" style="width: 80%; margin-left: 10%;"/> 
+
+#### 居民把分类的垃圾投放到收集车或交给收集员图片
+
+## 数 据 展 示
+
+**堆肥时间：**5月23日到7月24日（出肥），63天。
+
+**填料：**5月23日到5月26日，及6月4日每日添加厨余，共计98公斤，添加辅料32公斤。具体见下图。厨余共计98公斤，辅料共计：32公斤；共填料：130公斤。
+
+出仓重量65公斤。
+ 
+
+**温度**：具体温度变化如下图：
+
+ ```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`, "宜居广州生态环境保护中心"),
+                     `堆肥池` == "里水白箱") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+
+```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`, "宜居广州生态环境保护中心"),
+                     `堆肥池` == "里水绿箱") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`, "宜居广州生态环境保护中心"),
+                     `堆肥池` == "里水黑箱") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+
+
+
+## 堆 肥 实 践 总 结
+
+1.堆肥箱出肥量为填料总量的50%左右。
+
+2.填料4天，即停止加料，到出肥前不添加任何物质。第3-5天时，堆体温度可达到50°，由于堆肥箱内部有保温层，堆体温度在50°以上可持续15-20天，其后温度逐渐回落。堆肥样品检测氮含量合格，且种子发芽指数较高。持续高温未影响检测的堆肥产品品质。
+
+3.堆体过程中未出现大量苍蝇虫子。
+
+4.有渗滤液产生，堆体湿度大时，会有气味产生。
+
+5.绿箱堆肥样品未检出有效活菌数，具体原因需要进一步分析。

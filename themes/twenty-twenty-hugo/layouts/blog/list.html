@@ -1,0 +1,8 @@
+
+{{ define "main" }} 
+
+		{{ range .Pages }}
+			{{ .Render "post" }}
+		{{ end }}
+
+{{ end }}

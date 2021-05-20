@@ -1,0 +1,155 @@
+---
+title: "南京大学（溧水）生态环境研究院"
+output: html_document
+
+---
+
+```{css, echo=FALSE}
+d-title {
+  text-align: center;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(readxl)
+library(leaflet)
+library(sf)
+library(highcharter)
+library(echarts4r)
+library(lubridate)
+d <- read_excel("../../all3.xlsx")
+ll1 <- d %>% distinct(across(c(2, 31:32, 33:34)))
+
+d1 <- d %>% select(4, 2, 31, 14:17) %>%
+  gather(`温度类型`, `数值`, -c(1:3)) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+lv <- unique(d1$`温度类型`)[c(1, 4, 3, 2)]
+d2 <- d %>% select(4, 2, 31, 6, 9, 12) %>%
+  gather(`物质类型`, `数值`, -c(1:3)) %>%
+  mutate(`物质类型` = str_replace_all(`物质类型`,
+                                  "今日|添加|重量.*",
+                                  "")) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+d3 <- d %>% 
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  rename(`厨余`=`添加厨余重量（kg)`) %>% 
+  rename(`辅料`=`添加辅料重量（kg)`) %>% 
+  rename(`其他物质`=`今日添加其他物质重量（kg)`)
+  
+  
+```
+
+# 南京大学（溧水）生态环境研究院
+
+## 关 于 机 构
+
+### 南京大学（溧水）生态环境研究院是南京大学与南京市溧水区人民政府共同创办的独立法人事业单位，是社会公益性环境保护科学研究机构，主要从事具有引领性、创新性、基础性生态环境保护科学研究和成果应用转化。
+
+### 研究院旨在打造国内领先、国际一流的“环境科技创新平台、高端环保人才聚集平台、环保科研成果转化平台、国际交流与合作平台”。自成立以来，研究院在有机固废资源化技术与装备、绿色产品生命周期设计与评价、环境大数据平台技术、大气环境研究等方向取得一系列原创性成果。研究院网址：https://liee.nju.edu.cn。
+
+## 走 进 堆 肥 点
+
+**堆肥点名称**：南京大学（溧水）生态环境研究院办公区
+
+**堆肥类型**：开放式堆肥
+
+**基本情况：**每日在南京溧水区和园社区定时收集厨余50kg左右进行堆肥。厨余随机来自50-60户居民，使用Ghana堆肥箱进行堆肥。到目前为止，一共进行了3轮堆肥，每一轮堆肥使用Ghana堆肥箱中的一个堆仓（Ghana内分左右两个堆仓）。连续添加堆肥材料21天（三周），箱内静置21天（三周），出箱后转入金属制作的堆肥筐继续腐熟21天（三周），总计60左右。为了堆肥试验，每一轮使用了不同的堆肥调节用的干物质，第一轮采用椰糠（泡发），EM菌。第二轮采用椰糠（泡发）、少量锯末、EM菌。第三轮采用锯末、干树叶、前期堆肥产品，EM菌。
+
+<img src="/images/image049.png" style="width: 80%; margin-left: 10%;"/>  
+
+#### Ghana堆肥箱
+
+## 堆 肥 操 作
+
+<span style='color:pink;background:背景颜色;font-size:文字大小;font-family:字体;'>**具体操作方式可分为3步，每一轮采取同样的堆肥操作方式。首先，将准备好的堆肥材料进行箱外混合；其次，将混好的堆料放入堆肥箱；最后，把添加到堆肥箱中的堆料用干物质进行完全覆盖。详细步骤如下：**</span>  
+
+  
+* 堆肥箱底部加入30cm左右厚度的干物质铺垫  
+* 大块厨余简单破碎，挑出其中杂质   
+* 厨余上喷洒EM菌   
+* 添加适当的干物质  
+* 混合堆肥原料  
+* 混合原料放入堆肥箱  
+* 干物质覆盖堆体表面  
+* 堆料出箱进行腐  
+* 静置腐熟 
+
+<img src="/images/7.jpg" style="width: 80%; margin-left: 10%;"/>  
+
+## 数 据 展 示
+
+```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`,  "南京大学（溧水）生态环境研究院"),
+                     `堆肥池` == "Ghana左") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+
+```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`,  "南京大学（溧水）生态环境研究院"),
+                     `堆肥池` == "Ghana右") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+
+
+* **堆肥周期：**2019.7.12-2019.8.1每日连续添加厨余50kg左右  
+* **添料情况：**总共添加厨余585.86kg，椰渣286.98kg  
+* **堆肥周期：**2020.7.9-2020.7.30每日连续添加厨余30kg左右  
+* **添料情况：**总共添加厨余385.05kg，成熟肥+木屑256.15kg
+
+## 堆 肥 实 践 总 结
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**1. 堆肥表面覆盖物**</span>
+
+在三轮堆肥实践中，椰糠作为表面覆盖物的效果最佳，由于椰糠的透气性好且粒度小，可以形成有效阻隔，苍蝇等无法直接在堆料表面产卵。表面覆盖物更换为树叶后，需要使用大量树叶覆盖，而且由于树叶之间有缝隙，苍蝇等可以通过缝隙钻入堆肥箱进而产卵，堆体内部容易出现蝇蛆和黑水虻幼虫等。受条件限制，可以使用前期的堆肥产品代替椰糠进行表面覆盖。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**2. 堆肥长蛆或黑水虻幼虫方面的管理**</span>
+
+对于已经长蛆的堆体，可以适当的增加干物质，并进行翻堆。由于蝇卵的孵化需要一定湿度的，加入足够的干物质，堆体湿度适中时，不会大量产生蝇蛆。Ghana堆肥箱使用时不需要进行翻堆，不翻堆蝇蛆也不会爬出堆肥箱，对周围环境不会造成不良影响。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**3. 堆肥干物质类型**</span>
+
+根据实验室结果，椰糠具有良好的吸水性和透气性，为吸收同等质量的水，椰糠的使用量是细锯末的一半（质量）。当椰糠和锯末分别吸收大量水时，椰糠仍可散开，细锯末则会呈现厌氧状况（无法自然散开）。
+
+&emsp;&emsp;本次三轮堆肥验证了椰糠对于调节堆肥湿度以及通气情况的贡献。堆肥第2轮加入细锯末和未经破碎的干树叶，这些干物质难以起到吸水以及堆体内部支撑通氧的作用，出现了轻微臭气，并且有蝇蛆滋生。第3轮仍使用细锯末及树叶，未使用椰糠后，并且密切关注堆体的湿度情况。随着堆肥经验的增加，及时调节厨余与干物质（细锯末+干树叶）的体积比，未出现湿度过大、产生蝇蛆等问题。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**4. 社区（小区）内堆肥注意事项**</span>
+
+本案例中，堆肥未在社区内开展。由于公众对堆肥的接受度还较低。大家对堆肥的臭气、渗滤液、苍蝇等问题较为关注。
+
+4轮堆肥实践中，除改变堆肥干物质后发生了滋生蝇蛆的情况。均未出现明显的堆肥臭气，没有渗滤液产生。并且堆肥过程没有进行翻堆。实践证明，采用合适的堆肥干物质对于降低堆肥过程管理难度和工作量有较大的帮助。
+
+<span style='color:red;background:背景颜色;font-size:文字大小;font-family:字体;'>Ghana的每日厨余处理设计量时50-100kg，社区可以根据每日产生的厨余量进行计算需要的堆肥设施数量以及场地面积。</span>
+
+
+

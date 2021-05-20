@@ -1,0 +1,13 @@
+{{ $core := resources.Get "js/core.js" | minify }}
+<script src="{{ $core.Permalink }}"></script>
+<a ontouchstart="mycardPressed.call(this)" ontouchend="mycardReleased.call(this)" ontouchmove="mycardreleased.call(this)" 
+  href="{{ .Permalink }}" class="mycard blog-mycard" rel="bookmark" >
+  <div id="preface-time">
+    <p id="time-day">{{ .Date.Format "02" }}</p>
+    <p id="time-ym">{{ .Date.Format "2006.01" }}</p>
+  </div>
+  <article class="mycard-body">
+    <h2 class="mycard-title">{{ .Title }}</h2>
+    <p class="mycard-text">{{ if (isset .Params "description") }}{{ index .Params "description" | htmlUnescape }}{{ else }}{{ .Summary | plainify | htmlUnescape }}{{ end }}</p>
+  </article>
+</a>

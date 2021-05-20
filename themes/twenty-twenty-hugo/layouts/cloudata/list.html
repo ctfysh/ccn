@@ -1,0 +1,67 @@
+{{ define "main" }} 
+{{ $core := resources.Get "js/core.js" | minify }}
+<script src="{{ $core.Permalink }}"></script>
+<!-- <div class="dc-desc">
+    社区厨余堆肥试点平台
+    2018-2019年，南京大学（溧水）生态环境研究院与万科公益基金会共同发起了“社区厨余堆肥试点项目”（一期），探索建立“垃圾分类、废弃物资源化、土壤修复以及生态农业”协同体系。
+2020年-2022年，在万科公益基金会的继续支持下，试点项目二期即将启动。项目将通过支持试点伙伴开展社区厨余堆肥实践的方式，结合案例及经验总结等，探索社区厨余堆肥作为废弃物在地资源化利用的中国路径，推动基于社区的废弃物生物式处理技术和管理模式在中国进一步推广，致力于社区可持续发展及气候变化适应。
+</div> -->
+<!-- <div class="dc" rel="bookmark" >
+    <ul>
+      {{ range .Pages }}
+         <li>
+  			  {{ .Render "post" }}
+  			 </li>
+  		{{ end }}
+    </ul>
+</div> -->
+        {{ $jquery := resources.Get "slick/jquery.min.js" | minify }}
+			<script type="text/javascript" src="{{ $jquery.Permalink }}"></script>
+			  {{ $slickjs := resources.Get "slick/slick.min.js" | minify }}
+			<script type="text/javascript" src="{{ $slickjs.Permalink }}"></script>
+
+<script type="text/javascript">
+$('.dc ul').slick({
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 1000,
+});
+$(".dc").not('.slick-initialized').slick()
+</script>
+
+
+
+<div class="qr_code">
+   <p>微信扫一扫</p>
+  <img src="/images/image-20201210100253334.png" style="width:150px;"style="margin: 35px 20px 35px 30px;"/>
+  
+</div>
+
+
+
+<div class="content-wrap">
+  <div class="container-inner">
+    <div class="wrap-main">
+      <div class="wrap-left">
+        <ul class="logo-list">
+          {{ range .Pages }}
+            <li>
+              <a href="{{.Permalink}}">{{ with .Resources.GetMatch "logo*" }}
+                    {{ $logo := .Resize "170x" }}
+                    <img src="{{ $logo.Permalink }}"/>
+                 {{ end }}
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+        <div class="tc moreBox">
+          <a  target="_blank" class="moreBtn"><br/>更 多<br/>待 续</a> </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{{ end }}
+

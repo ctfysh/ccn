@@ -1,0 +1,231 @@
+---
+title: "Themes"
+output: html_document
+---
+
+```{css, echo=FALSE}
+d-title {
+  text-align: center;
+  color:#425BBB;
+}
+body
+{
+  background-color:rgba(255,0,0,0.0);
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(leaflet)
+library(leafletCN)
+library(plotly)
+library(highcharter)
+library(echarts4r)
+library(lubridate)
+library(crosstalk)
+library(vegan)
+d <- read_excel("G:/bigdata/web/all3.xlsx")
+
+d1 <- d %>% select(2,4,14:18) %>% 
+  gather("温度类型","数值",-c(1:2)) %>% 
+  rename(`时间`=`获取监测数据的时间`) %>% 
+  mutate(`时间`=ymd(`时间`)) %>% 
+  arrange(across(1:2)) %>% 
+  filter(!is.na(`数值`)) %>% 
+  mutate(`天数`=0) 
+
+for (i in seq_along(d1$`伙伴名称`)){
+  ddd1 <- d1 %>% filter(str_detect(`伙伴名称`, d1$`伙伴名称`[i]))
+  a <-   range(ddd1$`时间`) 
+  d1$`天数`[i] <- difftime(as.Date(a[2]),as.Date(a[1]),units = "days")
+}
+JG <- d1 %>% distinct(`伙伴名称`, .keep_all = TRUE) %>% 
+  select(1,5)
+
+dd1 <- d1%>% 
+  group_by(`伙伴名称`) %>%
+  summarise(`温度记录频次` = n()) %>% ungroup() 
+
+ll <- d %>% distinct(across(c(2, 31))) %>% 
+  group_by(`伙伴名称`) %>% 
+  summarise(`堆肥箱数量`=n())
+                  
+d2 <- d %>% select(2,4,6,9,12) %>% 
+  gather(`物质类型`,`数值`,-c(1:2)) %>% 
+  mutate(`物质类型` = str_replace_all(`物质类型`,
+                                "今日|添加|重量.*",
+                                "")) %>% 
+  rename(`时间`=`获取监测数据的时间`) %>% 
+  mutate(`时间`=ymd(`时间`)) %>% 
+  arrange(across(1:3)) %>% 
+  filter(!is.na(`数值`))%>% 
+  group_by(`伙伴名称`) %>%
+  summarise(`堆肥频次` = n(),
+            `堆肥总重量`=sum(`数值`)) %>% ungroup() %>% 
+  left_join(.,dd1,by="伙伴名称") %>% 
+  left_join(.,ll,by="伙伴名称") %>% 
+  left_join(.,JG,by="伙伴名称") 
+
+  d3 <- d2 %>% select(2:6) %>%decostand(.,'max') %>% 
+    mutate(`mean`=rowMeans(.)) %>% 
+    mutate(d2$`伙伴名称`) %>% 
+    rename(`伙伴名称`=`d2$伙伴名称`) %>% 
+    select(7,1:6)  
+    
+
+
+dd2 <- d3 %>% 
+  gather(`维度`,`数值`,-c(1)) %>% 
+  select(2,1,3) %>% 
+  spread(`伙伴名称`,`数值`) %>% 
+  .[-1,]
+```
+
+Row {data-height=650}
+-------------------------------------
+
+### Chart 1
+
+```{r echo=FALSE, layout="l-page"}
+# gg1 <- dd1 %>%
+#   ggplot(aes(`时间`, `数值`, color = `温度类型`)) +
+#   geom_line() + geom_point(shape = 1) +
+#   xlab(NULL) + ylab(NULL) +
+#   scale_x_date(date_labels = "%F") +
+#   theme_minimal(base_family = "Hei")
+# ggplotly(gg1) %>%
+#   layout(legend = list(orientation = "h", y = -0.1))
+highchart() %>%
+  # hc_title(text = "Basic drilldown") %>%
+  hc_xAxis(type = "category") %>%
+  hc_legend(enabled = FALSE) %>%
+  hc_plotOptions(
+    series = list(
+      boderWidth = 0,
+      dataLabels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled = TRUE)
+    )
+  ) %>%
+  hc_add_series(
+    color = "#495784",
+    data = d3 %>% select(c(1,7)) %>% arrange(mean),
+    type = "bar",
+    hcaes(`伙伴名称`, `mean`),
+    pointWidth = 8
+  ) %>% 
+  hc_chart(backgroundColor ='rgba(0,0,0,0)')
+```
+
+
+Row {data-height=350}
+-------------------------------------
+   
+### 青岛你我创益社会工作服务中心
+
+```{r echo=FALSE,fig.show='hold',fig.align='center'  }
+highchart() %>%
+  #polar设置极坐标
+  hc_chart(polar = TRUE,
+           type = "polygon",
+           backgroundColor = "transparent") %>%
+  #设置图形大小
+  hc_pane(size = "100%") %>%
+  #设置图例位置
+  hc_legend( enabled = FALSE) %>% 
+  hc_xAxis(
+           categories = dd2$`维度`,
+           labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+           gridLineColor= "#7F87A3",
+           #横轴线宽设为0，隐藏横轴
+           lineWidth = 0,
+           #旋转图表分割线至多边形的顶点
+           tickmarkPlacement = "on") %>%
+  hc_yAxis(
+    #设置图形为多边形
+    gridLineInterpolation = "polygon",
+    #纵轴线宽设为0，隐藏纵轴
+    labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+    gridLineColor= "#7F87A3",
+    lineWidth = 0,
+    min = 0) %>%
+  hc_tooltip(#提示框同时显示两条线的同一个类别下的值
+    shared = TRUE,
+    #提示框格式
+    pointFormat = '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>')%>%
+  hc_add_series(color = "#495784",name = "青岛你我创益社会工作服务中心",dd2$`青岛你我创益社会工作服务中心`) %>%
+  hc_add_theme(hc_theme_google()) 
+```
+
+### 成都根与芽环境文化交流中心
+
+```{r 02,echo=FALSE, layout="l-page",fig.height=6}
+highchart() %>%
+  #polar设置极坐标
+  hc_chart(polar = TRUE,
+           type = "polygon",
+           backgroundColor = "transparent")%>%
+  #设置图形大小
+  hc_pane(size = "100%") %>%
+  #设置图例位置
+  hc_legend( enabled = FALSE) %>% 
+  hc_xAxis(
+           categories = dd2$`维度`,
+           labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+           gridLineColor= "#7F87A3",
+           #横轴线宽设为0，隐藏横轴
+           lineWidth = 0,
+           #旋转图表分割线至多边形的顶点
+           tickmarkPlacement = "on") %>%
+  hc_yAxis(
+    #设置图形为多边形
+    gridLineInterpolation = "polygon",
+    #纵轴线宽设为0，隐藏纵轴
+    labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+    gridLineColor= "#7F87A3",
+    lineWidth = 0,
+    min = 0) %>%
+  hc_tooltip(#提示框同时显示两条线的同一个类别下的值
+    shared = TRUE,
+    #提示框格式
+    pointFormat = '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>')%>%
+  hc_add_series(color = "#495784",name = "成都根与芽环境文化交流中心",dd2$`成都根与芽环境文化交流中心`) %>%
+  hc_add_theme(hc_theme_google()) 
+```
+
+### 万科公益基金会
+
+```{r 03,echo=FALSE, layout="l-page",fig.height=6}
+highchart() %>%
+  #polar设置极坐标
+  hc_chart(polar = TRUE,
+           type = "polygon",
+           backgroundColor = "transparent") %>% 
+  #设置图形大小
+  hc_pane(size = "100%") %>%
+  #设置图例位置
+  hc_legend( enabled = FALSE) %>% 
+  hc_xAxis(
+           categories = dd2$`维度`,
+           labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+           gridLineColor= "#7F87A3",
+           #横轴线宽设为0，隐藏横轴
+           lineWidth = 0,
+           #旋转图表分割线至多边形的顶点
+           tickmarkPlacement = "on") %>%
+  hc_yAxis(
+    #设置图形为多边形
+    gridLineInterpolation = "polygon",
+    #纵轴线宽设为0，隐藏纵轴
+    labels = list(style = list(color='#3D6EFF',fontSize = "10px"),enabled=TRUE),
+    gridLineColor= "#7F87A3",
+    lineWidth = 0,
+    min = 0) %>%
+  hc_tooltip(#提示框同时显示两条线的同一个类别下的值
+    shared = TRUE,
+    #提示框格式
+    pointFormat = '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>')%>%
+  hc_add_series(color = "#495784",name = "万科公益基金会	",dd2$`万科公益基金会`) %>%
+  hc_add_theme(hc_theme_google()) 
+```
+

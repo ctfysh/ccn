@@ -1,0 +1,96 @@
+baseURL = "/"
+title = "中国厨余堆肥网"
+image = "images/logo.png"
+theme = "twenty-twenty-hugo"
+languageName = "En"
+languageCode = "en-us"
+# post pagination
+paginate = "6"
+# post excerpt
+summaryLength = "10"
+# disqus short name
+disqusShortname = "" # get your shortname form here : https://disqus.com
+# disable language
+disableLanguages = [] # desable language from here
+# google analytics
+googleAnalytics = "" # example : UA-123-45
+
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
+
+
+############################## Output ###############################
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+
+# unsafe html
+[markup.goldmark.renderer]
+unsafe = true
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+author = "author"
+
+############################## navigation ###############################
+
+####### menu.main #######
+[[menu.main]]
+name = "主页"
+URL = "/"
+weight = 1
+
+[[menu.main]]
+name = "平台展示"
+URL = "/cloudata"
+weight = 2
+
+[[menu.main]]
+name = "雪华说"
+URL = "/blog"
+weight = 3
+
+[[menu.main]]
+name = "前沿动态"
+URL = "/preface"
+weight = 4
+
+[[menu.main]]
+name = "堆肥小课堂"
+URL = "/duifei"
+weight = 5
+
+[[menu.main]]
+name = "关于我们"
+URL = "/about"
+weight = 6
+
+#################### default parameters ################################  
+[[params.links]]
+name = "南京大学"
+URL = "https://www.nju.edu.cn/"
+weight = 1
+
+[[params.links]]
+name = "南京大学环境学院"
+URL = "https://hjxy.nju.edu.cn/"
+weight = 2
+
+[[params.links]]
+name = "生态环境部"
+URL = "http://www.mee.gov.cn/"
+weight = 4
+
+[[params.links]]
+name = "生态环境部环境规划院"
+URL = "http://www.caep.org.cn/"
+weight = 5
+
+[[params.links]]
+name = "中国环境科学协会"
+URL = "http://www.chinacses.org/"
+weight = 6
+
+[[params.links]]
+name = "Resources, Environment and Sustainability期刊"
+URL = "https://www.journals.elsevier.com/resources-environment-and-sustainability/"
+weight = 7

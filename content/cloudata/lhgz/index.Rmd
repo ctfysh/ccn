@@ -1,0 +1,122 @@
+---
+title: "乐活（广州）生态环境科技有限责任公司"
+output: html_document
+
+---
+
+```{css, echo=FALSE}
+d-title {
+  text-align: center;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(readxl)
+library(leaflet)
+library(sf)
+library(highcharter)
+library(echarts4r)
+library(lubridate)
+d <- read_excel("../../all3.xlsx")
+ll1 <- d %>% distinct(across(c(2, 31:32, 33:34)))
+
+d1 <- d %>% select(4, 2, 31, 14:17) %>%
+  gather(`温度类型`, `数值`, -c(1:3)) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+lv <- unique(d1$`温度类型`)[c(1, 4, 3, 2)]
+d2 <- d %>% select(4, 2, 31, 6, 9, 12) %>%
+  gather(`物质类型`, `数值`, -c(1:3)) %>%
+  mutate(`物质类型` = str_replace_all(`物质类型`,
+                                  "今日|添加|重量.*",
+                                  "")) %>%
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  arrange(across(1:3)) %>%
+  filter(!is.na(`数值`))
+d3 <- d %>% 
+  rename(`时间` = `获取监测数据的时间`) %>%
+  mutate(`时间` = ymd(`时间`)) %>%
+  rename(`厨余`=`添加厨余重量（kg)`) %>% 
+  rename(`辅料`=`添加辅料重量（kg)`) %>% 
+  rename(`其他物质`=`今日添加其他物质重量（kg)`)
+  
+  
+```
+
+# 乐活（广州）生态环境科技有限责任公司
+
+## 关 于 机 构
+
+### &emsp;&emsp;LOHAS团队于2017年7月诞生于广州。核心成员分别来自社区营造、景观设计、水污染防治等领域，对生态环保及可持续发展充满热情。团队的使命是采用适切技术(Appropriate Technology, AT)，为社区打造小规模、低成本、易操作、生态相容、具有完整生命周期设计的产品，提供可持续设计咨询及设计方案，并在实践中不断改善团队的设计。<br/>
+
+
+
+##  走 进 堆 肥 点
+
+**堆肥点名称**：广东省广州市珠海区江怡路208号大学印象小区
+
+**堆肥类型**：好氧堆肥
+
+**堆肥原料**：厨余+干物质（第一轮木屑颗粒，第二轮玉米秸秆颗粒加木屑），无菌种
+
+**基本情况**：试点团队研发200L不锈钢堆肥转桶。堆肥桶设计预计每桶可以处理10余户3口之家的厨余。堆肥桶为滚筒式，可以转动实现搅拌和通气，内有保温层。堆肥桶分2个仓，一边持续投渣满后，可以加入另外一个仓。堆好后可以直接出仓使用，一般堆肥周期为2个月。堆肥桶有通气和防虫设计，使用过程中极少见苍蝇和黑水虻。
+
+<p style="text-indent: 4rem;">此堆肥设施是按照处理一个单元10户家庭左右的厨余量设计。本案例处理4-8户居民的厨余量，暂时没有处理社区居民的全部厨余。由于单个堆肥箱容积有限，可用于小型堆肥，可用于社区厨余堆肥的展示和社区宣教。堆肥原料来自于固定的4户居民家庭，由于广州落叶较少，本案例使用的堆肥干物质主要为木屑颗粒(如右图)，玉米秸秆颗粒、锯末、咖啡渣。未添加菌剂。</p>
+
+<img src="/images/image001.png" alt="image-20201210141241464" style="width: 80%; margin-left: 10%;"/>
+
+##  堆 肥 操 作
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**1）厨余收集**</span>：在堆肥箱旁放置一个小桶由居民自行投放。每天基本上有4户固定志愿者，4户非固定志愿者提供厨余。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**2）测温**</span>：投料前，测量堆体温度，测量位置分别为左中右（堆体较浅时），上中下（堆体较深时），并记录湿度，当日天气及气温。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**3）投料**</span>：投料前，对厨余进行简单的粉碎处理（第一轮未处理，第二轮用剪刀进行剪碎）后称重；按照碳氮比配备相应比例的干料，混匀后（这个步骤一般出现在厨余体积偏大时，为了避免与旧料混合时出现分布不均，因此会先进行箱外简单混合），倒入堆肥箱。厨余与干物质的重量比约为5.5:1。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**4）搅拌**</span>：转动堆肥箱，使堆体和新料的充分混匀。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**5）封箱**</span>：根据堆肥箱实际容量，当堆体体积占据堆肥箱的容量超过2/3时，停止投料，封闭堆肥箱，并进行每日测温及天气气温记录。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**6）腐熟**</span>：每日监测温度至温度下降至45℃左右，可采取箱内/外腐熟操作。实际操作中，温度降至40℃以下后出肥。
+
+<span style='color:green;background:背景颜色;font-size:文字大小;font-family:字体;'>**7）成熟肥使用情况**</span>：肥料出仓后提供给居民家庭种植用，暂未对居民做回访。
+
+##  数 据 展 示
+
+&emsp;&emsp;&emsp;&emsp;**堆肥时间：**2019年6月4日到7月31日，58天。
+
+&emsp;&emsp;&emsp;&emsp;**添加堆料和温度变化图：**
+```{r collapse=TRUE, fig.height=6}
+d3 %>% filter(str_detect(`伙伴名称`, "乐活（广州）生态环境科技有限责任公司"),
+                     `堆肥池` == "大学印象2号箱左") %>% 
+  arrange(`时间`) %>% 
+  e_chart(`时间`) %>%
+  e_line(`上层温度`,color='darkblue') %>%
+  e_line(`中层温度`,color='lightblue', itemStyle=list(borderWidth=0))%>%
+  e_line(`下层温度`,color='orange')%>%
+  e_line(`室温`)%>%
+  e_bar(`厨余`,y_index = 1)%>%e_bar(`辅料`,y_index = 1)%>%e_bar(`其他物质`,y_index = 1) %>%e_y_axis(scale=TRUE) %>%  e_datazoom(type = 'slider') %>% 
+  e_aria(enabled =  TRUE,decal = TRUE)%>%  e_tooltip( trigger = 'axis') %>% 
+  e_animation(
+  show = TRUE,
+  duration = 10000
+) 
+```
+
+
+##  堆 肥 实 践 总 结
+
+1. 堆肥箱有保温层，堆体高温期持续时间长(60°以上25天)。堆肥产品品质的检测结果基本正常，未发现持续高温对堆肥产品的直接影响。
+
+2. 堆体箱容积小，如果用于解决整个社区的厨余量，需要的堆肥箱数量较多。可用于微小规模社区堆肥或者家庭厨余堆肥。
+
+3. 受试点地原料限制，使用干物质为木屑颗粒，未尝试其他堆肥干物质效果。
+
+4. 堆肥过程无臭、无虫、无渗滤液。操作简便。
+
+5. 虽然箱体密封，但仍需要在降雨天气做好防雨工作，防止堆体进水影响正常堆肥过程。如果进水，则需要根据湿度情况添加干物质恢复堆体正常湿度。

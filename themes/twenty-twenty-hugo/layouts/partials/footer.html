@@ -1,0 +1,138 @@
+	{{ if .Site.Params.footer.enable }}
+    {{ with .Site.Params.footer }}
+    <aside class="footer-widgets-outer-wrapper" role="complementary">
+      <div class="footer-widgets-wrapper">
+        <div class="footer-widgets column-one grid-item">
+          <div class="widget widget_text">
+            <div class="widget-content">
+              <h2 class="widget-title subheading heading-size-3">{{ .title | markdownify }}</h2>
+              <div class="textwidget">
+                <p>{{ .content | markdownify }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer-widgets column-two grid-item">
+          <div class="widget widget_text">
+            <div class="widget-content">
+              <h2 class="widget-title subheading heading-size-3">发现我们</h2>
+              <div class="textwidget">
+                <p><strong>地址</strong><br/> {{ .address | markdownify }}</p>
+				<!-- <p><strong>时间</strong><br/>{{ .hours | markdownify }}</p> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- .footer-widgets-wrapper -->
+    </aside><!-- .footer-widgets-outer-wrapper -->
+    {{ end }}
+    {{ end }}
+
+
+<footer id="site-footer" role="contentinfo" class="header-footer-group">
+
+	<!-- 链接 -->
+	<a name="about"></a>
+<div class="jr-footer">
+	<div class="lianjie">
+		<h3 class="content3_title">
+			<div class="title_name">友情链接</div>
+		</h3>
+		<div class="sla_zi">
+			<ul>
+				{{ range .Site.Params.links }}
+				<li><a href="{{	.URL | absURL }}" target="_blank">{{ .name }}</a></li>
+				{{ end }}
+			</ul>
+		</div>
+	</div>
+
+    <div>
+      <div class="footer-ul">
+        <ul class="u1 fl">
+          <li style="font-size: 18px;">走进研究院</li>
+          <li><a href="https://liee.nju.edu.cn/zjyjy/zzjg7408/index.html">院况介绍</a></li>
+          <li><a href="https://liee.nju.edu.cn/zjyjy/zzjg7408/index.html">组织机构</a></li>
+          <li><a href="https://liee.nju.edu.cn/zjyjy/zzjg7408/index.html">重点实验室</a></li>
+        </ul>
+        <ul class="u2 fl">
+          <li style="font-size: 18px;">信息公开</li>
+          <li><a href="https://liee.nju.edu.cn/xxgk/zhxw/index.html">综合新闻</a></li>
+          <li><a href="https://liee.nju.edu.cn/xxgk/tzgg/index.html">通知公告</a></li>
+          <li><a href="https://liee.nju.edu.cn/xxgk/whjs/index.html">文化建设</a></li>
+        </ul>
+        <ul class="u3 fl">
+          <li style="font-size: 18px;">技术服务</li>
+          <li><a href="https://liee.nju.edu.cn/jsfw/jsfx/index.html">技术方向</a></li>
+          <li><a href="https://liee.nju.edu.cn/jsfw/jsfx/index.html">技术成果</a></li>
+          <li><a href="https://liee.nju.edu.cn/jsfw/jjfa/index.html">解决方案</a></li>
+        </ul>
+        <ul class="u4 fl">
+          <li style="font-size: 18px;">创新合作</li>
+          <li><a href="https://liee.nju.edu.cn/cxhz/xsjl/index.html">学术交流</a></li>
+          <li><a href="https://liee.nju.edu.cn/cxhz/gnhz/index.html">国内合作</a></li>
+          <li><a href="https://liee.nju.edu.cn/cxhz/jwhz/index.html">境外合作</a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+</footer>
+
+
+{{ "<!-- Search index -->" | safeHTML }}
+<script>
+  var indexURL = {{"index.json" | absURL}}
+</script>
+
+<!-- jquery -->
+
+{{ $script := resources.Get "js/script.js" | minify}}
+<script src="{{ $script.Permalink }}"></script>
+
+{{ "<!-- Main Script -->" | safeHTML }}
+{{ $search := resources.Get "js/search.js" | minify}}
+<script src="{{ $search.Permalink }}"></script>
+
+
+<!-- cookie -->
+{{ if site.Params.cookies.enable }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
+<div id="js-cookie-box" class="cookie-box cookie-box-hide">
+	本网站使用Cookie。继续使用本网站，即表示您同意其使用。<span id="js-cookie-button" class="wp-block-button__link" style="margin-left: 10px;">我同意</span>
+</div>
+<script>
+	(function ($) {
+		const cookieBox = document.getElementById('js-cookie-box');
+		const cookieButton = document.getElementById('js-cookie-button');
+		if (!Cookies.get('cookie-box')) {
+			cookieBox.classList.remove('cookie-box-hide');
+			cookieButton.onclick = function () {
+				Cookies.set('cookie-box', true, {
+					expires: {{ site.Params.cookies.expire_days }}
+				});
+				cookieBox.classList.add('cookie-box-hide');
+			};
+		}
+	})(jQuery);
+</script>
+
+<!-- cookie style -->
+<style>
+.cookie-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  z-index: 9999;
+  padding: 1rem 2rem;
+  background: rgb(71, 71, 71);
+  transition: all .75s cubic-bezier(.19, 1, .22, 1);
+  color: #fdfdfd;
+}
+
+.cookie-box-hide {
+  display: none;
+}
+</style>
+{{ end }}

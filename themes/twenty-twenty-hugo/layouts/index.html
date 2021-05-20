@@ -1,0 +1,208 @@
+{{ define "main" }}
+
+<div class="feature">
+	<div class="featured-media">
+		<div class="featured-media-inner section-inner">
+			{{ .Content }}
+		</div>
+	</div>
+	<!-- <div class="feature-media-subtext">
+		<p>截止到<span class="diff-color">{{ now.Format "2006.01.02" }}</span>，社区厨余堆肥平台共在全国<span class="diff-color">7</span>省<span class="diff-color">9</span>市展开堆肥试点，堆肥处理有机固体废弃物<span class="diff-color">10</span>吨。</p>
+	</div> -->
+</div>
+
+<div class="content">
+  
+    <!-- 
+  	<div class="section_1">
+		<div class="mainwrap">
+			<div class="news">
+				<h2>
+					<b></b>
+					前沿动态
+					<b></b>
+				</h2>
+				<ul class="clearfix">
+					{{- range (where site.RegularPages "Section" "preface" | first 3) -}}
+					<li>
+						<a href="{{ .Permalink }}">
+							<div class="time">
+								<span>{{ dateFormat "02" .Date }}</span>
+								{{ dateFormat "2006" .Date }}.{{ dateFormat "01" .Date }}
+							</div>
+							<div class="txtwrapper">
+								<h3>{{ .Title }}</h3>
+								<p>{{ .Summary }}</p>
+							</div>
+						</a>
+					</li>
+					{{- end -}}
+				</ul>
+			</div>
+
+			<a class="newsmore" href="/blog">更多推文</a>
+		</div>
+	</div>
+	-->
+	
+	<div class="section_1">
+	  <div class="mainwrap">
+	    <div class="clearfix">
+	      <div class="news-cont-container">
+  	      <div class="news-title">前沿动态</div>
+  	      <div class="news-cont">
+            <ul>
+              {{- range (where site.RegularPages "Section" "preface" | first 3) -}}
+  					<li>
+  						<a href="{{ .Permalink }}">
+  							<div class="time">
+  								<span>{{ dateFormat "2006.01.02" .Date }}</span>
+  							</div>
+  							<div class="txtwrapper">
+  								<h3>{{ .Title }}</h3>
+  								<p>{{ .Summary }}</p>
+  							</div>
+  						</a>
+  					</li>
+  					{{- end -}}
+            </ul>
+          </div>
+        </div>
+              {{ $jquery := resources.Get "slick/jquery.min.js" | minify }}
+      			<script type="text/javascript" src="{{ $jquery.Permalink }}"></script>
+      			  {{ $slickjs := resources.Get "slick/slick.min.js" | minify }}
+      			<script type="text/javascript" src="{{ $slickjs.Permalink }}"></script>
+      
+            <script type="text/javascript">
+            $('.news-cont ul').slick({
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              autoplay: true,
+              autoplaySpeed: 3050,
+            });
+            $(".news-cont").not('.slick-initialized').slick()
+            </script>
+	      <div class="news-info">
+	        <h5>厨余堆肥平台</h5>
+	        <h3>致力于社区厨余堆肥启蒙与推广</h3>
+	        <div class="text-info">
+	          2018-2019年，南京大学（溧水）生态环境研究院与万科公益基金会共同发起了“社区厨余堆肥试点项目”（一期），探索建立“垃圾分类、废弃物资源化、土壤修复以及生态农业”协同体系。 
+	          <br>
+	          <br>
+	          项目将通过支持试点伙伴开展社区厨余堆肥实践的方式，结合案例及经验总结等，探索社区厨余堆肥作为废弃物在地资源化利用的中国路径
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="section_2">
+		<div class="mainwrap">
+			<h2>
+				<span>雪华说</span>
+				<a class="more" href="/blog">更多 ></a>
+			</h2>
+		   <div class="focus">
+			
+    			<div class="bigplay" >
+    			   <ul>
+      				{{ range (where site.RegularPages "Section" "blog" | first 2) }}
+      				<li id="bigpic">
+      					{{ with .Resources.GetMatch "image.png" }}
+      					<img src="{{ .Permalink }}" alt="..."/>
+      		      {{ end }}
+      					<a href="{{ .Permalink }}"><div class="txtwrapper">
+      							<div class="cata">了解详情</div>
+      							<h3>{{ .Title }}</h3>
+      							<p>{{ .Summary }}</p>
+      						</div></a>
+      				</li>
+      				{{ end }}
+      			 </ul>
+    			</div>
+    			
+    			<div class="smallplay">
+    			   <ul>
+      				{{ range (where site.RegularPages "Section" "blog" | first 2).Reverse }}
+      				<li>
+      				  <div class="smallpic">
+      					{{ with .Resources.GetMatch "image.png" }}
+      					<img src="{{ .Permalink }}" alt="..."/>
+      		      {{ end }}
+      					<a href="{{ .Permalink }}"><div class="txtwrapper">
+      							<div class="cata">了解详情</div>
+      							<h3>{{ .Title }}</h3>
+      							<p>{{ .Summary }}</p>
+      						</div></a>
+      					</div>
+      				</li>
+      				{{ end }}
+      			 </ul>
+    			</div>
+
+			
+			  {{ $jquery := resources.Get "slick/jquery.min.js" | minify }}
+			<script type="text/javascript" src="{{ $jquery.Permalink }}"></script>
+			  {{ $slickjs := resources.Get "slick/slick.min.js" | minify }}
+			<script type="text/javascript" src="{{ $slickjs.Permalink }}"></script>
+
+			  <script type="text/javascript">
+			  
+				
+      $('.smallplay ul').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        centerMode: false,
+        arrows:false,
+        dots:false,
+        asNavFor:$('.bigplay ul')
+        });
+      $('.bigplay ul').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        centerMode: false,
+        arrows:false,
+        dots:false,
+        autoplaySpeed:4000,
+        asNavFor:$('.smallplay ul'),
+        });
+			  </script>
+		  </div> <!-- focus -->
+		</div> <!-- mainwrap -->
+	</div> <!-- section_w -->
+	
+
+
+	<div class="section_3">
+		<div class="mainwrap">
+			<div class="container">
+				<h2>
+					<b></b>
+					堆肥小课堂
+					<b></b>
+				</h2>
+				<ul>
+					{{ range (where site.RegularPages "Section" "duifei" | first 3) }}
+					<li>
+						<div class="inner_con">
+							{{ with .Resources.GetMatch "homepage.png" }}
+							<img src="{{ .Permalink }}" alt="???">
+							{{ end }}
+							<div class="txtwrapper">
+								<a href="{{ .Permalink }}"><h3>{{ .Title }}</h3></a>
+							</div>
+						</div>
+					</li>
+					{{ end }}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{{ end }}
