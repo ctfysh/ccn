@@ -1,56 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on 中国厨余堆肥</title>
+    <title>Categories on 中国厨余堆肥网</title>
     <link>/categories/</link>
-    <description>Recent content in Categories on 中国厨余堆肥</description>
+    <description>Recent content in Categories on 中国厨余堆肥网</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 14 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>网站学习</title>
-      <link>/categories/%E7%BD%91%E7%AB%99%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/%E7%BD%91%E7%AB%99%E5%AD%A6%E4%B9%A0/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>lifestyle</title>
-      <link>/categories/lifestyle/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/categories/lifestyle/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>operations</title>
-      <link>/categories/operations/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/categories/operations/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tour</title>
-      <link>/categories/tour/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/categories/tour/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Working days</title>
-      <link>/categories/working-days/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/categories/working-days/</guid>
-      <description></description>
-    </item>
-    
+    <language>en-us</language><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

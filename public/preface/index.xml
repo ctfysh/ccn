@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>中国厨余堆肥网</title>
+    <link>/preface/</link>
+    <description>Recent content on 中国厨余堆肥网</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 30 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/preface/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>中国社区厨余堆肥试点备选伙伴名单</title>
+      <link>/preface/zhongguoshequ/</link>
+      <pubDate>Wed, 30 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/preface/zhongguoshequ/</guid>
+      <description>2020年11月，在万科公益基金会支持下，南京大学（溧水）生态环境研究院正式启动“中国社区厨余堆肥试点项目（二期）”，面向全国公开招募10个试点社区合作伙伴。</description>
+    </item>
+    
+    <item>
+      <title>社区厨余堆肥试点招募</title>
+      <link>/preface/shequchuyu/</link>
+      <pubDate>Wed, 09 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/preface/shequchuyu/</guid>
+      <description>自“中国社区厨余堆肥试点”对外招募以来，我们已收到来自全国各地社会组织、企业、社区组织和乡村机构的申请，令我们项目组对共同探索和推广社区堆肥充满期待。</description>
+    </item>
+    
+  </channel>
+</rss>

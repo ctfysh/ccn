@@ -1,101 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on 中国厨余堆肥</title>
+    <title>Tags on 中国厨余堆肥网</title>
     <link>/tags/</link>
-    <description>Recent content in Tags on 中国厨余堆肥</description>
+    <description>Recent content in Tags on 中国厨余堆肥网</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 14 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>学习</title>
-      <link>/tags/%E5%AD%A6%E4%B9%A0/</link>
-      <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E5%AD%A6%E4%B9%A0/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>网站</title>
-      <link>/tags/%E7%BD%91%E7%AB%99/</link>
-      <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E7%BD%91%E7%AB%99/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>day</title>
-      <link>/tags/day/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/day/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>fashion</title>
-      <link>/tags/fashion/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/fashion/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>lifestyle</title>
-      <link>/tags/lifestyle/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/lifestyle/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tags</title>
-      <link>/tags/tags/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/tags/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tour</title>
-      <link>/tags/tour/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/tour/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>visit</title>
-      <link>/tags/visit/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/visit/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>work</title>
-      <link>/tags/work/</link>
-      <pubDate>Sat, 14 Mar 2020 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/work/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Thu, 23 Jul 2015 15:40:24 +0600</pubDate>
-      
-      <guid>/tags/r/</guid>
-      <description></description>
-    </item>
-    
+    <language>en-us</language><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

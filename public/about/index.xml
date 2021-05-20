@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>About on 中国厨余堆肥</title>
+    <title>关于我们 on 中国厨余堆肥网</title>
     <link>/about/</link>
-    <description>Recent content in About on 中国厨余堆肥</description>
+    <description>Recent content in 关于我们 on 中国厨余堆肥网</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="/about/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="/about/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

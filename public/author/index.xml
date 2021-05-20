@@ -1,18 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Author on 中国厨余堆肥</title>
+    <title>Author on 中国厨余堆肥网</title>
     <link>/author/</link>
-    <description>Recent content in Author on 中国厨余堆肥</description>
+    <description>Recent content in Author on 中国厨余堆肥网</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/author/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 19 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/author/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Admin</title>
-      <link>/author/admin/</link>
-      <pubDate>Wed, 14 Oct 2020 00:00:00 +0000</pubDate>
+      <title>张雪华</title>
+      <link>/author/%E5%BC%A0%E9%9B%AA%E5%8D%8E/</link>
+      <pubDate>Mon, 19 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>/author/admin/</guid>
+      <guid>/author/%E5%BC%A0%E9%9B%AA%E5%8D%8E/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>张诗文</title>
+      <link>/author/%E5%BC%A0%E8%AF%97%E6%96%87/</link>
+      <pubDate>Wed, 08 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/author/%E5%BC%A0%E8%AF%97%E6%96%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>王夏夏 李肖</title>
+      <link>/author/%E7%8E%8B%E5%A4%8F%E5%A4%8F-%E6%9D%8E%E8%82%96/</link>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/author/%E7%8E%8B%E5%A4%8F%E5%A4%8F-%E6%9D%8E%E8%82%96/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>王夏夏</title>
+      <link>/author/%E7%8E%8B%E5%A4%8F%E5%A4%8F/</link>
+      <pubDate>Mon, 16 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/author/%E7%8E%8B%E5%A4%8F%E5%A4%8F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>李肖</title>
+      <link>/author/%E6%9D%8E%E8%82%96/</link>
+      <pubDate>Wed, 26 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/author/%E6%9D%8E%E8%82%96/</guid>
       <description></description>
     </item>
     
